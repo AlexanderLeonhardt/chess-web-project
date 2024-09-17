@@ -30,3 +30,7 @@ body {
 .piece:hover {
   cursor: pointer;
 }
+
+.selected {
+  background: grey !important;
+}
