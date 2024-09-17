@@ -15,13 +15,15 @@ function Board() {
   const [boardState, setBoardState] = useState(board);
 
   return (
-    <board>
+    <div className="board">
       {boardState.map((row, rowIndex) =>
-        row.map((tile, tileIndex) => {
-          return <tile key={`${rowIndex},${tileIndex}`}>{tile}</tile>
-        })
+        <div key={rowIndex} className="row">
+          {row.map((tile, tileIndex) => {
+            return <div key={`${rowIndex},${tileIndex}`} className="tile" />
+          })}
+        </div>
       )}
-    </board>
+    </div>
   );
 }
 
