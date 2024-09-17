@@ -18,7 +18,9 @@ function Board() {
       {boardState.map((row, rowIndex) =>
         <div key={rowIndex} className="row">
           {row.map((tile, tileIndex) =>
-            <div key={`${rowIndex},${tileIndex}`} className="tile" />
+            <div key={`${rowIndex},${tileIndex}`} className="tile">
+              {tile && <img src={`src/assets/pieces/${tile}.svg`} className="piece" />}
+            </div>
           )}
         </div>
       )}
