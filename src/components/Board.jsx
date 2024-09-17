@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const board = [
   ['BR', 'BN', 'BB', 'BQ', 'BK', 'BB', 'BN', 'BR'], 
@@ -13,13 +13,25 @@ const board = [
 
 function Board() {
   const [boardState, setBoardState] = useState(board);
+  const [selectedPiece, setSelectedPiece] = useState(null);
+
+  function handleClick(rowIndex, tileIndex) {
+    if (!selectedPiece && board[rowIndex][tileIndex]) {
+      setSelectedPiece({ rowIndex, tileIndex });
+    } else if (selectedPiece) {
+      board[rowIndex][tileIndex] = board[selectedPiece.rowIndex][selectedPiece.tileIndex];
+      board[selectedPiece.rowIndex][selectedPiece.tileIndex] = '';
+      setSelectedPiece(null);
+    }
+  }
+
   return (
     <div className="board">
       {boardState.map((row, rowIndex) =>
         <div key={rowIndex} className="row">
           {row.map((tile, tileIndex) =>
-            <div key={`${rowIndex},${tileIndex}`} className="tile">
-              {tile && <img src={`src/assets/pieces/${tile}.svg`} className="piece" />}
+            <div key={`${rowIndex},${tileIndex}`} className="tile" onClick={() => handleClick(rowIndex, tileIndex)}>
+              {tile && <img src={`src/assets/pieces/${tile}.svg`} className="piece"/>}
             </div>
           )}
         </div>
