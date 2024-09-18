@@ -15,6 +15,26 @@ function Board() {
   const [boardState, setBoardState] = useState(board);
   const [selectedPiece, setSelectedPiece] = useState(null);
 
+  function validateMove(piece, fromRow, fromTile, toRow, toTile) {
+    const direction = piece[0] === 'W' ? -1 : 1;
+    const pieceType = piece[1];
+
+    switch (pieceType) {
+      case 'P':
+        if (fromTile === toTile) {
+          // 1 step
+          if (toRow === fromRow + direction && boardState[toRow][toTile] === '') return true;
+          // 2 steps
+          console.log(direction);
+          if ((fromRow === (direction === -1 ? 6 : 1)) && toRow === fromRow + 2 * direction && boardState[toRow][toTile] === '' && boardState[fromRow + direction][toTile] === '') return true;
+        }
+        return false;
+
+      default:
+        return false;
+    }
+  }
+
   function movePiece(toRow, toTile) {
     const fromRow = selectedPiece.rowIndex;
     const fromTile = selectedPiece.tileIndex;
@@ -33,7 +53,15 @@ function Board() {
     if (!selectedPiece && boardState[rowIndex][tileIndex]) {
       setSelectedPiece({ rowIndex, tileIndex });
     } else if (selectedPiece) {
-      movePiece(rowIndex, tileIndex);
+      if (validateMove(
+        boardState[selectedPiece.rowIndex][selectedPiece.tileIndex],
+        selectedPiece.rowIndex,
+        selectedPiece.tileIndex,
+        rowIndex,
+        tileIndex
+      )) {
+        movePiece(rowIndex, tileIndex);
+      }
       setSelectedPiece(null);
     }
   }
@@ -49,7 +77,13 @@ function Board() {
   }
   function onDrop(event, rowIndex, tileIndex) {
     event.preventDefault();
-    if (selectedPiece) {
+    if (selectedPiece && validateMove(
+      boardState[selectedPiece.rowIndex][selectedPiece.tileIndex],
+      selectedPiece.rowIndex,
+      selectedPiece.tileIndex,
+      rowIndex,
+      tileIndex
+    )) {
       movePiece(rowIndex, tileIndex);
       setSelectedPiece(null);
     }
