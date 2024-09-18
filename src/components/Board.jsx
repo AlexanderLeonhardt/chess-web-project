@@ -15,15 +15,6 @@ function Board() {
   const [boardState, setBoardState] = useState(board);
   const [selectedPiece, setSelectedPiece] = useState(null);
 
-  function handleClick(rowIndex, tileIndex) {
-    if (!selectedPiece && boardState[rowIndex][tileIndex]) {
-      setSelectedPiece({ rowIndex, tileIndex });
-    } else if (selectedPiece) {
-      movePiece(rowIndex, tileIndex);
-      setSelectedPiece(null);
-    }
-  }
-
   function movePiece(toRow, toTile) {
     const fromRow = selectedPiece.rowIndex;
     const fromTile = selectedPiece.tileIndex;
@@ -37,6 +28,33 @@ function Board() {
     setBoardState(updatedBoard);
   }
 
+  // for mobile
+  function handleClick(rowIndex, tileIndex) {
+    if (!selectedPiece && boardState[rowIndex][tileIndex]) {
+      setSelectedPiece({ rowIndex, tileIndex });
+    } else if (selectedPiece) {
+      movePiece(rowIndex, tileIndex);
+      setSelectedPiece(null);
+    }
+  }
+
+  // for desktop
+  function onDragStart(rowIndex, tileIndex) {
+    if (boardState[rowIndex][tileIndex]) {
+      setSelectedPiece({ rowIndex, tileIndex });
+    }
+  }
+  function onDragOver(event) {
+    event.preventDefault();
+  }
+  function onDrop(event, rowIndex, tileIndex) {
+    event.preventDefault();
+    if (selectedPiece) {
+      movePiece(rowIndex, tileIndex);
+      setSelectedPiece(null);
+    }
+  }
+
   return (
     <div className="board">
       {boardState.map((row, rowIndex) =>
@@ -44,10 +62,20 @@ function Board() {
           {row.map((tile, tileIndex) =>
             <div 
               key={`${rowIndex},${tileIndex}`}
-              onClick={() => handleClick(rowIndex, tileIndex)}
               className={`tile ${selectedPiece && selectedPiece.rowIndex === rowIndex && selectedPiece.tileIndex === tileIndex ? 'selected' : ''}`}
+              onClick={() => handleClick(rowIndex, tileIndex)}
+              onDragOver={onDragOver}
+              onDrop={(event) => onDrop(event, rowIndex, tileIndex)}
             >
-              {tile && <img src={`src/assets/pieces/${tile}.svg`} alt={tile} className="piece"/>}
+              {tile &&
+                <img 
+                  src={`src/assets/pieces/${tile}.svg`} 
+                  alt={tile} 
+                  className="piece"
+                  draggable
+                  onDragStart={() => onDragStart(rowIndex, tileIndex)}
+                />
+              }
             </div>
           )}
         </div>
