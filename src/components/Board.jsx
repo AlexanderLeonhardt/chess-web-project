@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const board = [
   ['BR', 'BN', 'BB', 'BQ', 'BK', 'BB', 'BN', 'BR'], 
@@ -14,6 +14,7 @@ const board = [
 function Board() {
   const [boardState, setBoardState] = useState(board);
   const [selectedPiece, setSelectedPiece] = useState(null);
+  const [lastMove, setLastMove] = useState(null);
 
   function validateMove(piece, fromRow, fromTile, toRow, toTile) {
     const direction = piece[0] === 'W' ? -1 : 1;
@@ -25,11 +26,18 @@ function Board() {
           // 1 step
           if (toRow === fromRow + direction && boardState[toRow][toTile] === '') return true;
           // 2 steps
-          if ((fromRow === (direction === -1 ? 6 : 1)) && toRow === fromRow + 2 * direction && boardState[toRow][toTile] === '' && boardState[fromRow + direction][toTile] === '') return true;
+          if ((fromRow === (direction === -1 ? 6 : 1)) && toRow === fromRow + 2 * direction && boardState[toRow][toTile] === '' && boardState[fromRow + direction][toTile] === '') {
+            setLastMove({ fromRow, fromTile, toRow, toTile });
+            return true;
+          }
         }
         // capturing
         if (Math.abs(fromTile - toTile) === 1 && toRow === fromRow + direction) {
-          if (boardState[toRow][toTile] && boardState[toRow][toTile][0] !== piece[0]) return true
+          if (boardState[toRow][toTile] && boardState[toRow][toTile][0] !== piece[0]) return true;
+          // en passant
+          if (lastMove && lastMove.toRow === fromRow && Math.abs(lastMove.toTile - fromTile) === 1) {
+            if (boardState[fromRow][toTile][1] === 'P' && boardState[fromRow][toTile][0] !== piece[0]) return true;
+          }
         }
         return false;
 
@@ -44,10 +52,12 @@ function Board() {
     const updatedBoard = boardState.map((row, rowIndex) =>
       row.map((tile, tileIndex) => {
         if (rowIndex === fromRow && tileIndex === fromTile) return '';
+        if (lastMove && Math.abs(lastMove.toTile - fromTile) === 1 && lastMove.toRow === fromRow && rowIndex === fromRow && tileIndex === lastMove.toTile) return '';
         if (rowIndex === toRow && tileIndex === toTile) return boardState[fromRow][fromTile];
         return tile;
       })
     )
+    if (lastMove) setLastMove(null);
     setBoardState(updatedBoard);
   }
 
