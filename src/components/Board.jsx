@@ -25,8 +25,11 @@ function Board() {
           // 1 step
           if (toRow === fromRow + direction && boardState[toRow][toTile] === '') return true;
           // 2 steps
-          console.log(direction);
           if ((fromRow === (direction === -1 ? 6 : 1)) && toRow === fromRow + 2 * direction && boardState[toRow][toTile] === '' && boardState[fromRow + direction][toTile] === '') return true;
+        }
+        // capturing
+        if (Math.abs(fromTile - toTile) === 1 && toRow === fromRow + direction) {
+          if (boardState[toRow][toTile] && boardState[toRow][toTile][0] !== piece[0]) return true
         }
         return false;
 
