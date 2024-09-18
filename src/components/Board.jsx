@@ -19,21 +19,22 @@ function Board() {
     if (!selectedPiece && boardState[rowIndex][tileIndex]) {
       setSelectedPiece({ rowIndex, tileIndex });
     } else if (selectedPiece) {
-      const updatedBoard = boardState.map((row, rIndex) =>
-        row.map((tile, tIndex) => {
-          if (rIndex === selectedPiece.rowIndex && tIndex === selectedPiece.tileIndex) {
-            return '';
-          }
-          if (rIndex === rowIndex && tIndex === tileIndex) {
-            return boardState[selectedPiece.rowIndex][selectedPiece.tileIndex];
-          }
-          return tile;
-        })
-      );
-      
-      setBoardState(updatedBoard);
+      movePiece(rowIndex, tileIndex);
       setSelectedPiece(null);
     }
+  }
+
+  function movePiece(toRow, toTile) {
+    const fromRow = selectedPiece.rowIndex;
+    const fromTile = selectedPiece.tileIndex;
+    const updatedBoard = boardState.map((row, rowIndex) =>
+      row.map((tile, tileIndex) => {
+        if (rowIndex === fromRow && tileIndex === fromTile) return '';
+        if (rowIndex === toRow && tileIndex === toTile) return boardState[fromRow][fromTile];
+        return tile;
+      })
+    )
+    setBoardState(updatedBoard);
   }
 
   return (
