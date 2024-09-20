@@ -1,4 +1,3 @@
-import { getCharacter } from '../../helper';
 import styles from './Board.module.css';
 import Files from './Bits/Files';
 import Ranks from './Bits/Ranks';
