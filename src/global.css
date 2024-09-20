@@ -1,8 +1,8 @@
 :root {
   --tile-size: 100px;
-  --bg-color: #302e2b;
-  --light-tile: #ebecd0;
-  --dark-tile: #779556;
+  --bg-color: #1b1b1b;
+  --light-tile: #ead0ad;
+  --dark-tile: #a97a57;
 }
 
 html, body {
