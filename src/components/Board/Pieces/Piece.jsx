@@ -10,11 +10,16 @@ const Piece = ({rank, file, piece}) => {
     }, 0);
   }
 
+  const onDragEnd = event => {
+    event.target.style.display = 'block';
+  }
+
   return (
     <div 
       className={`${styles.piece} ${styles[piece]} ${styles[`p-${file}${rank}`]}`}
       draggable
       onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
     />
   );
 }
