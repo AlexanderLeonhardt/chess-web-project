@@ -1,1 +1,1 @@
-export const getCharacter = n => String.fromCharCode(n + 97);
+export const getCharacter = n => String.fromCharCode(n + 96);
