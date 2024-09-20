@@ -2,6 +2,7 @@ import { getCharacter } from '../../helper';
 import styles from './Board.module.css';
 import Files from './Bits/Files';
 import Ranks from './Bits/Ranks';
+import Pieces from './Pieces/Pieces';
 
 function Board() {
 
@@ -22,6 +23,7 @@ function Board() {
         })
       )}
     </div>
+    <Pieces />
     <Files files={files}/>
   </div>
 }
