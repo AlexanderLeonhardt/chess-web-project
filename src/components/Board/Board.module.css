@@ -1,0 +1,21 @@
+#board {
+
+}
+
+#tiles {
+  display: grid;
+  grid-template-columns: repeat(8, var(--tile-size));
+  grid-template-rows: repeat(8, var(--tile-size));
+  width: calc(8*var(--tile-size));
+}
+
+.tile {
+
+}
+
+.light {
+  background: var(--light-tile);
+}
+.dark {
+  background: var(--dark-tile);
+}

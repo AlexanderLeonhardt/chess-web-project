@@ -1,36 +1,15 @@
+:root {
+  --tile-size: 100px;
+  --bg-color: #302e2b;
+  --light-tile: #ebecd0;
+  --dark-tile: #779556;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  background: #302e2b;
-}
-
-.board {
-  display: inline-block;
-}
-
-.row {
-  display: grid;
-  grid-template-columns: repeat(8, 100px);
-}
-
-.tile {
-  content: '';
-  width: 100px;
-  height: 100px;
-  background: #779556;
-}
-
-.row:nth-child(2n) .tile:nth-child(2n),
-.row:nth-child(2n+1) .tile:nth-child(2n+1) {
-  background: #ebecd0;
-}
-
-.piece {
-  width: 100%;
-  height: 100%;
-}
-.piece:hover {
-  cursor: pointer;
-}
-
-.selected {
-  background: grey !important;
+  background: var(--bg-color);
 }

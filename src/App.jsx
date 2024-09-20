@@ -1,4 +1,4 @@
-import Board from './components/Board'
+import Board from './components/Board/Board'
 
 function App() {
 
@@ -6,7 +6,7 @@ function App() {
     <>
       <Board />
     </>
-  )
+  );
 }
 
 export default App
