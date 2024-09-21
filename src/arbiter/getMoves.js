@@ -28,3 +28,25 @@ export const getRookMoves = ({position, piece, rank, file}) => {
 
   return moves;
 }
+
+export const getKnightMoves = ({position, rank, file}) => {
+  const moves = [];
+  const enemy = position[rank][file].startsWith('W') ? 'B' : 'W';
+
+  const candidates = [
+    [-2, -1],
+    [-2, 1],
+    [2, -1],
+    [2, 1],
+    [-1, -2],
+    [-1, 2],
+    [1, -2],
+    [1, 2],
+  ];
+  candidates.forEach(c => {
+    const cell = position?.[rank + c[0]]?.[file + c[1]];
+    if (cell !== undefined && (cell.startsWith(enemy) || cell === ''))
+      moves.push([rank + c[0],file + c[1]]);
+  })
+  return moves;
+}
