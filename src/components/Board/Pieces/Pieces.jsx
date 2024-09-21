@@ -3,7 +3,7 @@ import Piece from './Piece';
 import { useRef } from 'react';
 import { copyPosition } from '../../../helper';
 import { useAppContext } from '../../../contexts/Context';
-import { makeNewMove } from '../../../reducer/actions/move';
+import { clearCandidateMoves, makeNewMove } from '../../../reducer/actions/move';
 
 const Pieces = () => {
   const ref = useRef();
@@ -29,11 +29,14 @@ const Pieces = () => {
     const {x, y} = calculateCoords(event);
 
     const [piece, rank, file] = event.dataTransfer.getData('text').split(',');
-    
-    newPosition[Number(rank)][Number(file)] = '';
-    newPosition[x][y] = piece;
 
-    dispatch(makeNewMove({newPosition}));
+    if (appState.candidateMoves?.find(m => m[0] === x && m[1] === y)) {
+      newPosition[Number(rank)][Number(file)] = '';
+      newPosition[x][y] = piece;
+      dispatch(makeNewMove({newPosition}));
+    }
+
+    dispatch(clearCandidateMoves());
   }
 
   return <div 
