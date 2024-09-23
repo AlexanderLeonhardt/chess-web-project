@@ -132,7 +132,7 @@ export const getPawnMoves = ({position, piece, rank, file}) => {
   return moves;
 }
 
-export const getPawnCaptures = ({position, piece, rank, file}) => {
+export const getPawnCaptures = ({position, prevPosition, piece, rank, file}) => {
   const moves = [];
   const dir = piece === 'WP' ? 1 : -1;
   const enemy = piece[0] === 'W' ? 'B' : 'W';
@@ -143,6 +143,21 @@ export const getPawnCaptures = ({position, piece, rank, file}) => {
 
   if (position?.[rank + dir]?.[file + 1] && position?.[rank + dir]?.[file + 1].startsWith(enemy)) {
     moves.push([rank + dir, file + 1])
+  }
+
+  const enemyPawn = dir === 1 ? 'BP' : 'WP';
+  const adjacentFiles = [file - 1, file + 1];
+  if (prevPosition) {
+    if ((dir === 1 && rank === 4) || (dir === -1 && rank === 3)) {
+      adjacentFiles.forEach(f => {
+        if (position?.[rank]?.[f] === enemyPawn && 
+            position?.[rank+dir*2]?.[f] === '' && 
+            prevPosition?.[rank]?.[f] === '' && 
+            prevPosition?.[rank+dir*2]?.[f] === enemyPawn) {
+              moves.push([rank + dir, f])
+        }
+      });
+    }
   }
 
   return moves;

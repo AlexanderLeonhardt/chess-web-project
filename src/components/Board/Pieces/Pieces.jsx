@@ -31,6 +31,9 @@ const Pieces = () => {
     const [piece, rank, file] = event.dataTransfer.getData('text').split(',');
 
     if (appState.candidateMoves?.find(m => m[0] === x && m[1] === y)) {
+      // capturing empty square with pawn = en-passant
+      if (piece.endsWith('P') && !newPosition[x][y] &&x !== rank && y !== file) newPosition[rank][y] = '';
+
       newPosition[Number(rank)][Number(file)] = '';
       newPosition[x][y] = piece;
       dispatch(makeNewMove({newPosition}));
