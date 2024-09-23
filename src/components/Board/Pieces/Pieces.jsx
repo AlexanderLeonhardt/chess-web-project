@@ -1,7 +1,7 @@
 import styles from './Pieces.module.css';
 import Piece from './Piece';
 import { useRef } from 'react';
-import { copyPosition } from '../../../helper';
+import arbiter from '../../../arbiter/arbiter';
 import { useAppContext } from '../../../contexts/Context';
 import { clearCandidateMoves, makeNewMove } from '../../../reducer/actions/move';
 
@@ -23,23 +23,29 @@ const Pieces = () => {
   const onDragOver = event => {
     event.preventDefault();
   }
-  const onDrop = event => {
-    event.preventDefault();
-    const newPosition = copyPosition(currentPosition);
-    const {x, y} = calculateCoords(event);
 
+  const move = event => {
+    const {x, y} = calculateCoords(event);
     const [piece, rank, file] = event.dataTransfer.getData('text').split(',');
 
     if (appState.candidateMoves?.find(m => m[0] === x && m[1] === y)) {
-      // capturing empty square with pawn = en-passant
-      if (piece.endsWith('P') && !newPosition[x][y] &&x !== rank && y !== file) newPosition[rank][y] = '';
-
-      newPosition[Number(rank)][Number(file)] = '';
-      newPosition[x][y] = piece;
+      const newPosition = arbiter.performMove({
+        position: currentPosition,
+        piece,
+        rank,
+        file,
+        x,
+        y,
+      });
       dispatch(makeNewMove({newPosition}));
     }
-
     dispatch(clearCandidateMoves());
+  }
+
+  const onDrop = event => {
+    event.preventDefault();
+
+    move(event);
   }
 
   return <div 
