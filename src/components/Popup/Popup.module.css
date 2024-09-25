@@ -1,0 +1,7 @@
+#popup {
+  width: calc(8*var(--tile-size));
+  height: calc(8*var(--tile-size));
+  position: absolute;
+  left: calc(.25*var(--tile-size));
+  background: rgba(0, 0, 0, 0.5);
+}

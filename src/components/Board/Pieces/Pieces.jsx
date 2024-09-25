@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import arbiter from '../../../arbiter/arbiter';
 import { useAppContext } from '../../../contexts/Context';
 import { clearCandidateMoves, makeNewMove } from '../../../reducer/actions/move';
+import { openPromotion } from '../../../reducer/actions/popup';
 
 const Pieces = () => {
   const ref = useRef();
@@ -19,16 +20,29 @@ const Pieces = () => {
     const x = 7 - Math.floor((event.clientY - top) / size);
     return {x, y};
   }
-
+  
   const onDragOver = event => {
     event.preventDefault();
   }
+
+  const openPromotionBox = ({rank, file, x, y}) => 
+    dispatch(openPromotion({
+      rank : Number(rank), 
+      file : Number(file),
+      x, 
+      y
+    }));
 
   const move = event => {
     const {x, y} = calculateCoords(event);
     const [piece, rank, file] = event.dataTransfer.getData('text').split(',');
 
     if (appState.candidateMoves?.find(m => m[0] === x && m[1] === y)) {
+      if (piece === 'WP' && x === 7 || piece === 'BP' && x === 0) {
+        openPromotionBox({rank, file, x, y});
+        return
+      }
+
       const newPosition = arbiter.performMove({
         position: currentPosition,
         piece,

@@ -3,6 +3,7 @@ import Files from './Bits/Files';
 import Ranks from './Bits/Ranks';
 import Pieces from './Pieces/Pieces';
 import { useAppContext } from '../../contexts/Context';
+import Popup from '../Popup/Popop';
 
 function Board() {
 
@@ -36,6 +37,7 @@ function Board() {
       )}
     </div>
     <Pieces />
+    <Popup />
     <Files files={files}/>
   </div>
 }
