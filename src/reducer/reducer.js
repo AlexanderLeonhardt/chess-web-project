@@ -60,6 +60,12 @@ export const reducer = (state, action) => {
         status: Status.stalemate,
       }
     }
+    case actionTypes.INSUFFICIENT_MATERIAL: {
+      return {
+        ...state,
+        status: Status.insufficient,
+      }
+    }
     case actionTypes.NEW_GAME: {
       return {
         ...action.payload
