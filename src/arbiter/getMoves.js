@@ -1,3 +1,5 @@
+import arbiter from "./arbiter";
+
 export const getRookMoves = ({position, piece, rank, file}) => {
   const moves = [];
   const us = piece[0];
@@ -169,28 +171,64 @@ export const getCastlingMoves = ({position, castleDirection, piece, rank, file})
   if (file !== 4 || rank % 7 !== 0 || castleDirection === 'none') return moves;
 
   if (piece.startsWith('W')) {
+    if (arbiter.isPlayerInCheck({positionAfterMove: position, player: 'W'}))
+      return moves;
     if (['left','both'].includes(castleDirection) &&
         !position[0][3] &&
         !position[0][2] &&
         !position[0][1] &&
-        position[0][0] === 'WR'
+        position[0][0] === 'WR' &&
+        !arbiter.isPlayerInCheck({
+          positionAfterMove: arbiter.performMove({position,piece,rank,file,x:0,y:3}),
+          player: 'W',
+        }),
+        !arbiter.isPlayerInCheck({
+          positionAfterMove: arbiter.performMove({position,piece,rank,file,x:0,y:2}),
+          player: 'W',
+        })
     ) moves.push([0, 2]);
     if (['right','both'].includes(castleDirection) &&
         !position[0][5] &&
         !position[0][6] &&
-        position[0][7] === 'WR'
+        position[0][7] === 'WR' &&
+        !arbiter.isPlayerInCheck({
+          positionAfterMove: arbiter.performMove({position,piece,rank,file,x:0,y:5}),
+          player: 'W',
+        }),
+        !arbiter.isPlayerInCheck({
+          positionAfterMove: arbiter.performMove({position,piece,rank,file,x:0,y:6}),
+          player: 'W',
+        })
     ) moves.push([0, 6]);
   } else {
+    if (arbiter.isPlayerInCheck({positionAfterMove: position, player: 'B'}))
+      return moves;
     if (['left','both'].includes(castleDirection) &&
         !position[7][3] &&
         !position[7][2] &&
         !position[7][1] &&
-        position[7][0] === 'BR'
+        position[7][0] === 'BR' &&
+        !arbiter.isPlayerInCheck({
+          positionAfterMove: arbiter.performMove({position,piece,rank,file,x:7,y:3}),
+          player: 'B',
+        }),
+        !arbiter.isPlayerInCheck({
+          positionAfterMove: arbiter.performMove({position,piece,rank,file,x:7,y:2}),
+          player: 'B',
+        })
     ) moves.push([7, 2]);
     if (['right','both'].includes(castleDirection) &&
         !position[7][5] &&
         !position[7][6] &&
-        position[7][7] === 'BR'
+        position[7][7] === 'BR' &&
+        !arbiter.isPlayerInCheck({
+          positionAfterMove: arbiter.performMove({position,piece,rank,file,x:7,y:5}),
+          player: 'B',
+        }),
+        !arbiter.isPlayerInCheck({
+          positionAfterMove: arbiter.performMove({position,piece,rank,file,x:7,y:6}),
+          player: 'B',
+        })
     ) moves.push([7, 6]);
   }
 
