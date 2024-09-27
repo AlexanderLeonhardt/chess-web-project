@@ -4,6 +4,8 @@ import Ranks from './Bits/Ranks';
 import Pieces from './Pieces/Pieces';
 import { useAppContext } from '../../contexts/Context';
 import Popup from '../Popup/Popop';
+import arbiter from '../../arbiter/arbiter';
+import { getKingPosition } from '../../arbiter/getMoves';
 
 function Board() {
 
@@ -12,6 +14,19 @@ function Board() {
 
   const {appState} = useAppContext();
   const position = appState.position[appState.position.length-1];
+
+  const isChecked = (() => {
+    const inInCheck = arbiter.isPlayerInCheck({
+      positionAfterMove: position,
+      player: appState.turn
+    });
+    if (inInCheck)
+      return getKingPosition(position, appState.turn)
+
+    return null
+  })();
+
+  const getCheckHighlight = (i, j) => (isChecked && isChecked[0] === i && isChecked[1] === j) ? styles.checked : '';
 
   const getColor = (i, j) => styles[(i + j) % 2 === 0 ? 'dark' : 'light'];
 
@@ -31,7 +46,7 @@ function Board() {
         files.map((file, j) => {
           return <div 
             key={rank+''+file}
-            className={`${styles.tile} ${getColor(7-i, j)} ${validMoves(7-i, j)}`}
+            className={`${styles.tile} ${getColor(7-i, j)} ${validMoves(7-i, j)} ${getCheckHighlight(7-i, j)}`}
           ></div>
         })
       )}

@@ -43,3 +43,12 @@
   top: calc(4px);
   border: 6px solid rgba(0, 0, 0, 0.1);;
 }
+
+.checked:after {
+  display: block;
+  position: relative;
+  content: '';
+  width: var(--tile-size);
+  height: var(--tile-size);
+  background: rgba(255, 0, 0, 0.6);
+}
