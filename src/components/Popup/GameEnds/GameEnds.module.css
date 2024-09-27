@@ -1,0 +1,18 @@
+#popupInner {
+  width: 50%;
+  height: 20%;
+  background: var(--light-tile);
+  position: absolute;
+  bottom: 45%;
+  left: 25%;
+  border: 8px solid var(--light-tile);
+  box-shadow: 0 0 0 8px var(--dark-tile);
+  text-align: center;
+}
+
+#popupInner button {
+  font-size: 1.5rem;
+}
+#popupInner button:hover {
+  cursor: pointer;
+}

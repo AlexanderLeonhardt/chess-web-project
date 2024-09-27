@@ -6,6 +6,8 @@ import { useAppContext } from '../../contexts/Context';
 import Popup from '../Popup/Popop';
 import arbiter from '../../arbiter/arbiter';
 import { getKingPosition } from '../../arbiter/getMoves';
+import PromotionBox from '../Popup/PromotionBox/PromotionBox';
+import GameEnds from '../Popup/GameEnds/GameEnds';
 
 function Board() {
 
@@ -52,7 +54,10 @@ function Board() {
       )}
     </div>
     <Pieces />
-    <Popup />
+    <Popup>
+      <PromotionBox />
+      <GameEnds />
+    </Popup>
     <Files files={files}/>
   </div>
 }
