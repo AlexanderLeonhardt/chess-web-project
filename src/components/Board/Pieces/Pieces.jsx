@@ -6,7 +6,7 @@ import { useAppContext } from '../../../contexts/Context';
 import { clearCandidateMoves, makeNewMove } from '../../../reducer/actions/move';
 import { openPromotion } from '../../../reducer/actions/popup';
 import { getCastleDirections } from '../../../arbiter/getMoves';
-import { updateCastling } from '../../../reducer/actions/game';
+import { detectStalemate, updateCastling } from '../../../reducer/actions/game';
 
 const Pieces = () => {
   const ref = useRef();
@@ -52,6 +52,10 @@ const Pieces = () => {
     const [piece, rank, file] = event.dataTransfer.getData('text').split(',');
 
     if (appState.candidateMoves?.find(m => m[0] === x && m[1] === y)) {
+
+      const opponent = piece.startsWith('B') ? 'W' : 'B';
+      const castleDirection = appState.castleDirection[`${piece.startsWith('B') ? 'W' : 'B'}`];
+
       if (piece === 'WP' && x === 7 || piece === 'BP' && x === 0) {
         openPromotionBox({rank, file, x, y});
         return
@@ -70,6 +74,8 @@ const Pieces = () => {
         y,
       });
       dispatch(makeNewMove({newPosition}));
+
+      if (arbiter.isStalemate(newPosition, opponent,  castleDirection)) dispatch(detectStalemate());
     }
     dispatch(clearCandidateMoves());
   }
